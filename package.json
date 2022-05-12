@@ -1,0 +1,33 @@
+{
+  "name": "ez-instrument-nodejs",
+  "version": "0.0.0-alpha",
+  "description": "",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pro19/ez-instrument-nodejs.git"
+  },
+  "keywords": [
+    "ez",
+    "ez-instrument",
+    "instrument",
+    "opentelemetry",
+    "tracing",
+    "distributed-tracing",
+    "telemetry"
+  ],
+  "author": {
+    "name": "Pranshu Mishra",
+    "email": "pranshu188@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/Pro19/ez-instrument-nodejs/issues"
+  },
+  "homepage": "https://github.com/Pro19/ez-instrument-nodejs#readme"
+}
