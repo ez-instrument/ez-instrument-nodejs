@@ -1,8 +1,17 @@
 {
-  "name": "ez-instrument-nodejs",
-  "version": "0.0.0-alpha",
-  "description": "",
-  "main": "src/index.js",
+  "name": "ez-instrument",
+  "version": "0.0.0-alpha.1",
+  "description": "Easy OpenTelemetry tracing instrumentation for Node.JS",
+  "license": "LGPL-3.0-only",
+  "author": {
+    "name": "Pranshu Mishra",
+    "email": "pranshu188@gmail.com"
+  },
+  "homepage": "https://github.com/Pro19/ez-instrument-nodejs#readme",
+  "bugs": {
+    "url": "https://github.com/Pro19/ez-instrument-nodejs/issues"
+  },
+  "main": "./src/index.js",
   "engines": {
     "node": ">=8.0.0"
   },
@@ -21,13 +30,5 @@
     "tracing",
     "distributed-tracing",
     "telemetry"
-  ],
-  "author": {
-    "name": "Pranshu Mishra",
-    "email": "pranshu188@gmail.com"
-  },
-  "bugs": {
-    "url": "https://github.com/Pro19/ez-instrument-nodejs/issues"
-  },
-  "homepage": "https://github.com/Pro19/ez-instrument-nodejs#readme"
+  ]
 }
