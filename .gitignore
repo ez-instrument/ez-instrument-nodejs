@@ -1,3 +1,18 @@
+# ignore these
 temp-notes
-
 temp-tracing-yaml.yml
+
+# nodejs dependencies directory
+node_modules
+
+# to test out env vars
+.env
+
+# lock file
+package-lock.json
+
+# a testing directory which i use to design the API
+demo
+
+# VS Code config
+.vscode
