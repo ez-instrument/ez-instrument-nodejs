@@ -2,6 +2,9 @@
 
 <br/>
 
+## `0.2.0-beta`
+- Initial code driven API ready (`EZInstrument` & `EZInstrumentOptions`).
+
 ## `0.1.0-alpha`
 - Added support for manual instrumentation via global tracer provider.
 - Added support for basic automatic instrumentation.

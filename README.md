@@ -16,6 +16,17 @@ EZ-Instrument is a quick and easy way to instrument your application (especially
 
 <br/>
 
+### Instrumentations
+EZ-Instrument supports both automatic & manual instrumentations.
+
+However, by default automatic instrumentation is enabled & supported only for:
+- [@opentelemetry/instrumentation-http](https://github.com/open-telemetry/opentelemetry-js/tree/main/experimental/packages/opentelemetry-instrumentation-http)
+- [@opentelemetry/instrumentation-express](https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/plugins/node/opentelemetry-instrumentation-express)
+
+> _There is currently no way to customize them as well. This library is currently a work-in-progress project. Future versions will allow for greater flexibility in dealing automatic instrumentation libraries._
+
+<br/>
+
 ## Usage
 
 ### Automatic Instrumentation
@@ -70,7 +81,7 @@ span.end()                                      // always end spans
 
 ## Contributions
 
-Contributions are not welcomed at the moment. I do intend to involve the community for contributions only after v1.0.0 has been publicly released.
+Contributions are not welcomed at the moment. I do intend to involve the community for contributions only after v1.0.0 has been released. In the meanwhile, do feel free to raise issues.
 
 ---
 
