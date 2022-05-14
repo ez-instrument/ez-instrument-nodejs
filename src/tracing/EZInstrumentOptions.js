@@ -56,7 +56,8 @@ class EZInstrumentOptions {
          * Choose your type of exporter (http, grpc, etc.).
          * 
          * Defaults to OpenTelemetry's http exporter.
-         * @type {string}
+         * @default "http"
+         * @type {("http" | "grpc" | "otel-http" | "otel-grpc")}
          */
         exporterType: "http",
         /**
@@ -67,10 +68,10 @@ class EZInstrumentOptions {
     };
 
     /**
-     * Log level (info, debug, error, verbose, none).
+     * Log level (none, info, debug, warn, error, verbose, all).
      * 
-     * @default "error" - Defaults to only error logs.
-     * @type {string}
+     * @default "error" - Defaults to error logs.
+     * @type {("none" | "info" | "debug" | "warn" | "error" | "verbose" | "all")}
      */
     logLevel = "error";
 }
