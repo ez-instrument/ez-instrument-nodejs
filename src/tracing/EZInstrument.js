@@ -1,6 +1,7 @@
 const { EZInstrumentOptions } = require('./EZInstrumentOptions');
 const { FinalOptions } = require('./FinalOptions');
 const { GeneralUtils } = require('../utils/GeneralUtils');
+const { ConfigFactory } = require('./ConfigFactory');
 
 const { DiagConsoleLogger, diag, DiagLogLevel } = require('@opentelemetry/api');
 
@@ -40,10 +41,10 @@ class EZInstrument {
     constructor(options) {
         this.utils = new GeneralUtils();
         
-        this.tracingOptions = options;
+        this.constructorOptions = options;
         
         this.log = diag;
-        this.log.setLogger(new DiagConsoleLogger(), this.getLogLevel(this.tracingOptions.logLevel));
+        this.log.setLogger(new DiagConsoleLogger(), this.getLogLevel(this.constructorOptions.logLevel));
     }
 
     /**
@@ -54,9 +55,13 @@ class EZInstrument {
     initTracing() {
         try {
             // fetch enableTracing flag from ENV var & YAML file as well
-            if(this.shouldEnableTracing(this.tracingOptions.enableTracing)) {
-                const finalOptions = this.getFinalOptions(this.tracingOptions);
+            if(this.shouldEnableTracing()) {
+                const configFactory = new ConfigFactory();
+                const environmentOptions = configFactory.getConfigFromEnvironment();
+
+                const finalOptions = this.getFinalOptions(this.constructorOptions, environmentOptions);
                 this.logFinalOptions(finalOptions);
+                
                 this.setOpenTelemetryTracing(finalOptions);
             }
         } catch (error) {
@@ -67,10 +72,9 @@ class EZInstrument {
     /**
      * Will add check for YAML config file later.
      * @private
-     * @param {boolean} fromConstructor 
      */
-    shouldEnableTracing(constructorOption) {
-        const enableTracing = this.utils.returnNextIfNullOrUndefined([process.env.EZ_ENABLE_TRACING, constructorOption], "false");
+    shouldEnableTracing() {
+        const enableTracing = this.utils.returnNextIfNullOrUndefined([process.env.EZ_ENABLE_TRACING, this.constructorOptions.enableTracing], "false");
 
         return (enableTracing.toString().toLowerCase() === "true") ? true : false;
     }
@@ -126,32 +130,71 @@ class EZInstrument {
     }
 
     /**
+     * Split this function into classes
      * @private
      * @param {EZInstrumentOptions} constructorOptions
-     * @returns {FinalOptions}
+     * @param {EZInstrumentOptions} environmentOptions
+     * @returns {FinalOptions} 
      */
-    getFinalOptions(constructorOptions) {
+    getFinalOptions(constructorOptions, environmentOptions) {
         let finalOptions = new FinalOptions();
 
-        finalOptions.service.name = this.utils.returnNextIfNullOrUndefined([constructorOptions.service.name], finalOptions.service.name);
-        finalOptions.service.namespace = this.utils.returnNextIfNullOrUndefined([constructorOptions.service.namespace], finalOptions.service.namespace);
-        finalOptions.service.version = this.utils.returnNextIfNullOrUndefined([constructorOptions.service.version], finalOptions.service.version);
+        // make a ServiceOptionsConfigBuilder class for this section
+        finalOptions.service.name = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.service.name,
+            environmentOptions.service.name
+        ], finalOptions.service.name);
+        finalOptions.service.namespace = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.service.namespace,
+            environmentOptions.service.namespace
+        ], finalOptions.service.namespace);
+        finalOptions.service.version = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.service.version,
+            environmentOptions.service.version
+        ], finalOptions.service.version);
 
-        finalOptions.deployment.environment = this.utils.returnNextIfNullOrUndefined([constructorOptions.deployment.environment], finalOptions.deployment.environment);
+        // make a DeploymentOptionsConfigBuilder class for this section
+        finalOptions.deployment.environment = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.deployment.environment,
+            environmentOptions.deployment.environment
+        ], finalOptions.deployment.environment);
         
-        finalOptions.export.url = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.url], finalOptions.export.url);
-        finalOptions.export.enableConsoleExporter = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.enableConsoleExporter], finalOptions.export.enableConsoleExporter);
-        finalOptions.export.exporterType = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.exporterType], finalOptions.export.exporterType);
+        // make a ExportOptionsConfigBuilder class for this section
+        // ExportOptionsConfigBuilder will depend on BatchSpanProcessorConfigBuilder class
+        finalOptions.export.url = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.export.url,
+            environmentOptions.export.url
+        ], finalOptions.export.url);
+        finalOptions.export.enableConsoleExporter = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.export.enableConsoleExporter,
+            environmentOptions.export.enableConsoleExporter
+        ], finalOptions.export.enableConsoleExporter);
+        finalOptions.export.exporterType = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.export.exporterType,
+            environmentOptions.export.exporterType
+        ], finalOptions.export.exporterType);
         finalOptions.export.exporter = this.getExporter(finalOptions.export.exporterType, finalOptions.export.url);
 
-        finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.batchSpanProcessorConfig.exportTimeoutMillis], 
-            finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis);
-        finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.batchSpanProcessorConfig.maxExportBatchSize],
-            finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize);
-        finalOptions.export.batchSpanProcessorConfig.maxQueueSize = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.batchSpanProcessorConfig.maxQueueSize],
+        // make a BatchSpanProcessorConfigBuilder class for this section
+        finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.export.batchSpanProcessorConfig.exportTimeoutMillis,
+            environmentOptions.export.batchSpanProcessorConfig.exportTimeoutMillis
+        ], finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis);
+
+        finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.export.batchSpanProcessorConfig.maxExportBatchSize,
+            environmentOptions.export.batchSpanProcessorConfig.maxExportBatchSize
+        ], finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize);
+
+        finalOptions.export.batchSpanProcessorConfig.maxQueueSize = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.export.batchSpanProcessorConfig.maxQueueSize,
+            environmentOptions.export.batchSpanProcessorConfig.maxQueueSize
+        ],
             finalOptions.export.batchSpanProcessorConfig.maxQueueSize);
-        finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.batchSpanProcessorConfig.scheduledDelayMillis],
-            finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis);
+        finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis = this.utils.returnNextIfNullOrUndefined([
+            constructorOptions.export.batchSpanProcessorConfig.scheduledDelayMillis,
+            environmentOptions.export.batchSpanProcessorConfig.scheduledDelayMillis
+        ], finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis);
 
 
         (finalOptions.service.name === "") ? 
