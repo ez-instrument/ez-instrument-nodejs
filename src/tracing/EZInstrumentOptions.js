@@ -64,7 +64,37 @@ class EZInstrumentOptions {
          * Enables the ConsoleSpanExporter which prints all spans to the console.
          * @type {boolean}
          */
-        enableConsoleExporter: false
+        enableConsoleExporter: false,
+        /**
+         * Config for OpenTelemetry's batch span processor that batches spans exported by
+         * the SDK then pushes them to the exporter pipeline.
+         */
+        batchSpanProcessorConfig: {
+            /**
+             * How long the export can run before it is cancelled.
+             * @default 30000
+             * @type {number}
+             */
+            exportTimeoutMillis: 30000,
+            /**
+             * The maximum batch size of every export. It must be smaller or equal to maxQueueSize.
+             * @default 512
+             * @type {number}
+             */
+            maxExportBatchSize: 512,
+            /**
+             * The maximum queue size. After the size is reached spans are dropped.
+             * @default 2048
+             * @type {number}
+             */
+            maxQueueSize: 2048,
+            /**
+             * The delay interval in milliseconds between two consecutive exports.
+             * @default 5000
+             * @type {number}
+             */
+            scheduledDelayMillis: 5000
+        }
     };
 
     /**

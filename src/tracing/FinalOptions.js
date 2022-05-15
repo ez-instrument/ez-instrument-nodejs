@@ -37,7 +37,25 @@ class FinalOptions {
         /**
          * @type {boolean}
          */
-        enableConsoleExporter: false
+        enableConsoleExporter: false,
+        batchSpanProcessorConfig: {
+            /**
+             * @type {number|null}
+             */
+            exportTimeoutMillis: null,
+            /**
+             * @type {number|null}
+             */
+            maxExportBatchSize: null,
+            /**
+             * @type {number|null}
+             */
+            maxQueueSize: null,
+            /**
+             * @type {number|null}
+             */
+            scheduledDelayMillis: null
+        }
     };
 
     /**

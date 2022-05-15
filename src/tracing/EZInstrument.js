@@ -128,6 +128,7 @@ class EZInstrument {
         finalOptions.logLevel = this.getLogLevel(constructorOptions.logLevel);
         log.setLogger(new DiagConsoleLogger(), finalOptions.logLevel);
 
+        // will add null, empty & undefined checks to all these options later
         finalOptions.service.name = constructorOptions.service.name;
         finalOptions.service.namespace = constructorOptions.service.namespace;
         finalOptions.service.version = constructorOptions.service.version;
@@ -138,6 +139,11 @@ class EZInstrument {
         finalOptions.export.enableConsoleExporter = constructorOptions.export.enableConsoleExporter;
         finalOptions.export.exporterType = constructorOptions.export.exporterType;
         finalOptions.export.exporter = this.getExporter(finalOptions.export.exporterType, finalOptions.export.url);
+
+        finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis = constructorOptions.export.batchSpanProcessorConfig.exportTimeoutMillis;
+        finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize = constructorOptions.export.batchSpanProcessorConfig.maxExportBatchSize;
+        finalOptions.export.batchSpanProcessorConfig.maxQueueSize = constructorOptions.export.batchSpanProcessorConfig.maxQueueSize;
+        finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis = constructorOptions.export.batchSpanProcessorConfig.scheduledDelayMillis;
 
         const { GeneralUtils } = require('../utils/GeneralUtils');
         const utils = new GeneralUtils();
@@ -165,6 +171,11 @@ class EZInstrument {
         log.info(`ez-instrument: export.exporterType = ${finalOptions.export.exporterType}`);
         log.info(`ez-instrument: export.url = ${finalOptions.export.url}`);
         log.info(`ez-instrument: export.enableConsoleExporter = ${finalOptions.export.enableConsoleExporter}`);
+
+        log.info(`ez-instrument: batchSpanProcessorConfig.exportTimeoutMillis = ${finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis}`);
+        log.info(`ez-instrument: batchSpanProcessorConfig.maxExportBatchSize = ${finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize}`);
+        log.info(`ez-instrument: batchSpanProcessorConfig.maxQueueSize = ${finalOptions.export.batchSpanProcessorConfig.maxQueueSize}`);
+        log.info(`ez-instrument: batchSpanProcessorConfig.scheduledDelayMillis = ${finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis}`);
     }
 
     /**
@@ -197,7 +208,12 @@ class EZInstrument {
                 resource: serviceResources
             });
 
-            nodeTraceProvider.addSpanProcessor(new BatchSpanProcessor(finalOptions.export.exporter));
+            nodeTraceProvider.addSpanProcessor(new BatchSpanProcessor(finalOptions.export.exporter, {
+                exportTimeoutMillis: finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis,
+                maxExportBatchSize: finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize,
+                maxQueueSize: finalOptions.export.batchSpanProcessorConfig.maxQueueSize,
+                scheduledDelayMillis: finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis
+            }));
 
             if(finalOptions.export.enableConsoleExporter === true) {
                 nodeTraceProvider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
