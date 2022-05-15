@@ -2,6 +2,10 @@
 
 <br/>
 
+## `0.4.0-beta`
+- Added support for environment variables as an input source.
+- Restructed codebase with a new class: ConfigFactory
+
 ## `0.3.3-beta`
 - Implemented better logging.
 - Implemented better error handling.
