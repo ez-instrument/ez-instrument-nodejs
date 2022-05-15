@@ -95,7 +95,7 @@ Contributions are not welcomed at the moment. I do intend to involve the communi
 - [x] Initial working basic intrumentation.
 - [x] Manual instrumentation support.
 - [ ] Support for opentelemery automatic instrumentation libraries.
-- [ ] Environment variable support.
+- [x] Environment variable support.
 - [ ] YAML config file support.
 - [ ] CLI to generate a template YAML config file and/or a `.env` file.
 - [ ] Unit tests.
