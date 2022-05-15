@@ -2,6 +2,13 @@
 
 <br/>
 
+## `0.3.3-beta`
+- Implemented better logging.
+- Implemented better error handling.
+- Implemented better final option building logic.
+- Added support for two env vars: `EZ_ENABLE_TRACING` & `EZ_LOGLEVEL`.
+- Added support for batch span processor configuration.
+
 ## `0.2.0-beta`
 - Initial code driven API ready (`EZInstrument` & `EZInstrumentOptions`).
 
