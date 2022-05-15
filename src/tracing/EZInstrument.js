@@ -1,6 +1,8 @@
 const { EZInstrumentOptions } = require('./EZInstrumentOptions');
 const { FinalOptions } = require('./FinalOptions');
-const { DiagConsoleLogger, diag: log } = require('@opentelemetry/api');
+const { GeneralUtils } = require('../utils/GeneralUtils');
+
+const { DiagConsoleLogger, diag, DiagLogLevel } = require('@opentelemetry/api');
 
 /**
  * Instruments your service for tracing.
@@ -36,7 +38,12 @@ class EZInstrument {
      * tracing.initTracing();
      */
     constructor(options) {
+        this.utils = new GeneralUtils();
+        
         this.tracingOptions = options;
+        
+        this.log = diag;
+        this.log.setLogger(new DiagConsoleLogger(), this.getLogLevel(this.tracingOptions.logLevel));
     }
 
     /**
@@ -58,12 +65,14 @@ class EZInstrument {
     }
 
     /**
-     * Just returning the arg for now. Will add checks for ENV var & YAML config file later.
+     * Will add check for YAML config file later.
      * @private
      * @param {boolean} fromConstructor 
      */
-    shouldEnableTracing(fromConstructor) {
-        return fromConstructor;
+    shouldEnableTracing(constructorOption) {
+        const enableTracing = this.utils.returnNextIfNullOrUndefined([process.env.EZ_ENABLE_TRACING, constructorOption], "false");
+
+        return (enableTracing.toString().toLowerCase() === "true") ? true : false;
     }
 
     /**
@@ -71,30 +80,29 @@ class EZInstrument {
      * @param {string} logLevel
      * @returns {DiagLogLevel}
      */
-    getLogLevel(logLevel) {
-        const { DiagLogLevel, diag } = require('@opentelemetry/api');
-        let resultLogLevel = null;
+    getLogLevel(constructorOption) {
+        const logLevel = this.utils.returnNextIfNullOrUndefined([process.env.EZ_LOGLEVEL, constructorOption], "error");
+        
         if(logLevel == "all") {
-            resultLogLevel = DiagLogLevel.ALL;
+            return DiagLogLevel.ALL;
         } else if(logLevel == "info") {
-            resultLogLevel = DiagLogLevel.INFO;
+            return DiagLogLevel.INFO;
         } else if(logLevel == "debug") {
-            resultLogLevel = DiagLogLevel.DEBUG;
+            return DiagLogLevel.DEBUG;
         } else if(logLevel == "warn") {
-            resultLogLevel = DiagLogLevel.WARN;
+            return DiagLogLevel.WARN;
         } else if(logLevel == "error") {
-            resultLogLevel = DiagLogLevel.ERROR;
+            return DiagLogLevel.ERROR;
         } else if(logLevel == "none") {
-            resultLogLevel = DiagLogLevel.NONE;
+            return DiagLogLevel.NONE;
         } else {
-            resultLogLevel = DiagLogLevel.ERROR;
+            this.utils.logAndThrowException(this.log, "ez-instrument: Invalid log level.");
         }
-        return resultLogLevel;
     }
 
     /**
      * @private
-     * @param {string|null} exporterType
+     * @param {string} exporterType
      * @param {string|null} exportUrl
      */
     getExporter(exporterType, exportUrl) {
@@ -113,7 +121,7 @@ class EZInstrument {
             });
             return grpcExporter;
         } else {
-            return null;
+            this.utils.logAndThrowException(this.log, "ez-instrument: Invalid exporter type.");
         }
     }
 
@@ -125,34 +133,30 @@ class EZInstrument {
     getFinalOptions(constructorOptions) {
         let finalOptions = new FinalOptions();
 
-        finalOptions.logLevel = this.getLogLevel(constructorOptions.logLevel);
-        log.setLogger(new DiagConsoleLogger(), finalOptions.logLevel);
+        finalOptions.service.name = this.utils.returnNextIfNullOrUndefined([constructorOptions.service.name], finalOptions.service.name);
+        finalOptions.service.namespace = this.utils.returnNextIfNullOrUndefined([constructorOptions.service.namespace], finalOptions.service.namespace);
+        finalOptions.service.version = this.utils.returnNextIfNullOrUndefined([constructorOptions.service.version], finalOptions.service.version);
 
-        // will add null, empty & undefined checks to all these options later
-        finalOptions.service.name = constructorOptions.service.name;
-        finalOptions.service.namespace = constructorOptions.service.namespace;
-        finalOptions.service.version = constructorOptions.service.version;
-
-        finalOptions.deployment.environment = constructorOptions.deployment.environment;
+        finalOptions.deployment.environment = this.utils.returnNextIfNullOrUndefined([constructorOptions.deployment.environment], finalOptions.deployment.environment);
         
-        finalOptions.export.url = constructorOptions.export.url;
-        finalOptions.export.enableConsoleExporter = constructorOptions.export.enableConsoleExporter;
-        finalOptions.export.exporterType = constructorOptions.export.exporterType;
+        finalOptions.export.url = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.url], finalOptions.export.url);
+        finalOptions.export.enableConsoleExporter = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.enableConsoleExporter], finalOptions.export.enableConsoleExporter);
+        finalOptions.export.exporterType = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.exporterType], finalOptions.export.exporterType);
         finalOptions.export.exporter = this.getExporter(finalOptions.export.exporterType, finalOptions.export.url);
 
-        finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis = constructorOptions.export.batchSpanProcessorConfig.exportTimeoutMillis;
-        finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize = constructorOptions.export.batchSpanProcessorConfig.maxExportBatchSize;
-        finalOptions.export.batchSpanProcessorConfig.maxQueueSize = constructorOptions.export.batchSpanProcessorConfig.maxQueueSize;
-        finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis = constructorOptions.export.batchSpanProcessorConfig.scheduledDelayMillis;
+        finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.batchSpanProcessorConfig.exportTimeoutMillis], 
+            finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis);
+        finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.batchSpanProcessorConfig.maxExportBatchSize],
+            finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize);
+        finalOptions.export.batchSpanProcessorConfig.maxQueueSize = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.batchSpanProcessorConfig.maxQueueSize],
+            finalOptions.export.batchSpanProcessorConfig.maxQueueSize);
+        finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis = this.utils.returnNextIfNullOrUndefined([constructorOptions.export.batchSpanProcessorConfig.scheduledDelayMillis],
+            finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis);
 
-        const { GeneralUtils } = require('../utils/GeneralUtils');
-        const utils = new GeneralUtils();
 
-        if(utils.isNullOrEmptyOrUndefined(finalOptions.service.name)) {
-            let errorMessage = "ez-instument: Cannot initialize tracing without service name.";
-            log.error(errorMessage);
-            throw errorMessage;
-        }
+        (finalOptions.service.name === "") ? 
+            this.utils.logAndThrowException(this.log, "ez-instument: Cannot initialize tracing without service name.")
+            : this.log.debug('ez-instrument: Final options verified');
 
         return finalOptions;
     }
@@ -162,20 +166,20 @@ class EZInstrument {
      * @param {FinalOptions} finalOptions 
      */
     logFinalOptions(finalOptions) {
-        log.info(`ez-instrument: service.name = ${finalOptions.service.name}`);
-        log.info(`ez-instrument: service.namespace = ${finalOptions.service.namespace}`);
-        log.info(`ez-instrument: service.version = ${finalOptions.service.version}`);
+        this.log.info(`ez-instrument: service.name = ${finalOptions.service.name}`);
+        this.log.info(`ez-instrument: service.namespace = ${finalOptions.service.namespace}`);
+        this.log.info(`ez-instrument: service.version = ${finalOptions.service.version}`);
 
-        log.info(`ez-instrument: deployment.environment = ${finalOptions.deployment.environment}`);
+        this.log.info(`ez-instrument: deployment.environment = ${finalOptions.deployment.environment}`);
 
-        log.info(`ez-instrument: export.exporterType = ${finalOptions.export.exporterType}`);
-        log.info(`ez-instrument: export.url = ${finalOptions.export.url}`);
-        log.info(`ez-instrument: export.enableConsoleExporter = ${finalOptions.export.enableConsoleExporter}`);
+        this.log.info(`ez-instrument: export.exporterType = ${finalOptions.export.exporterType}`);
+        this.log.info(`ez-instrument: export.url = ${finalOptions.export.url}`);
+        this.log.info(`ez-instrument: export.enableConsoleExporter = ${finalOptions.export.enableConsoleExporter}`);
 
-        log.info(`ez-instrument: batchSpanProcessorConfig.exportTimeoutMillis = ${finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis}`);
-        log.info(`ez-instrument: batchSpanProcessorConfig.maxExportBatchSize = ${finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize}`);
-        log.info(`ez-instrument: batchSpanProcessorConfig.maxQueueSize = ${finalOptions.export.batchSpanProcessorConfig.maxQueueSize}`);
-        log.info(`ez-instrument: batchSpanProcessorConfig.scheduledDelayMillis = ${finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis}`);
+        this.log.info(`ez-instrument: batchSpanProcessorConfig.exportTimeoutMillis = ${finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis}`);
+        this.log.info(`ez-instrument: batchSpanProcessorConfig.maxExportBatchSize = ${finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize}`);
+        this.log.info(`ez-instrument: batchSpanProcessorConfig.maxQueueSize = ${finalOptions.export.batchSpanProcessorConfig.maxQueueSize}`);
+        this.log.info(`ez-instrument: batchSpanProcessorConfig.scheduledDelayMillis = ${finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis}`);
     }
 
     /**
@@ -194,7 +198,7 @@ class EZInstrument {
             const { ExpressInstrumentation } = require('@opentelemetry/instrumentation-express');
             const { HttpInstrumentation } = require('@opentelemetry/instrumentation-http');
 
-            log.info("ez-instrument: Initializing OpenTelemetry tracing.");
+            this.log.info("ez-instrument: Initializing OpenTelemetry tracing.");
 
             const serviceResources = new Resource({
                 [SemanticResourceAttributes.SERVICE_NAME]: finalOptions.service.name,
@@ -234,7 +238,7 @@ class EZInstrument {
                 ]
             });
 
-            log.info('ez-instrument: Initialized OpenTelemetry tracing.');
+            this.log.info('ez-instrument: Initialized OpenTelemetry tracing.');
 
             // graceful shutdown
             ['SIGINT', 'SIGTERM'].forEach(signal => {
