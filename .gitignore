@@ -16,3 +16,6 @@ demo
 
 # VS Code config
 .vscode
+
+# my local scripts folder to do CI/CD (might switch to GitHub Actions later)
+scripts
