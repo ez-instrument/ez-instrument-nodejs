@@ -7,30 +7,24 @@
     "name": "Pranshu Mishra",
     "email": "pranshu188@gmail.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pro19/ez-instrument-nodejs.git"
+  },
   "homepage": "https://github.com/Pro19/ez-instrument-nodejs#readme",
   "bugs": {
     "url": "https://github.com/Pro19/ez-instrument-nodejs/issues"
   },
   "main": "./src/index.js",
+  "files": [
+    "*"
+  ],
   "engines": {
     "node": ">=8.0.0"
   },
   "scripts": {
     "test": "node ./demo/demo.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Pro19/ez-instrument-nodejs.git"
-  },
-  "keywords": [
-    "ez",
-    "ez-instrument",
-    "instrument",
-    "opentelemetry",
-    "tracing",
-    "distributed-tracing",
-    "telemetry"
-  ],
   "dependencies": {
     "@opentelemetry/api": "1.1.0",
     "@opentelemetry/core": "1.2.0",
@@ -43,5 +37,14 @@
     "@opentelemetry/sdk-trace-base": "1.2.0",
     "@opentelemetry/sdk-trace-node": "1.2.0",
     "@opentelemetry/semantic-conventions": "1.2.0"
-  }
+  },
+  "keywords": [
+    "ez",
+    "ez-instrument",
+    "instrument",
+    "opentelemetry",
+    "tracing",
+    "distributed-tracing",
+    "telemetry"
+  ]
 }
