@@ -1,11 +1,13 @@
 /**
- * Code driven configuration class for EZInstrument.
+ * Configuration model class for EZInstrument.
+ * All input methods such as environment variables, yaml file, constructor, etc. need to return
+ * an object of this class to be processed by the FinalOptionsBuilder.
  */
 class EZInstrumentOptions {
     /**
      * Flag to disable or enable tracing. This is a mandatory field.
+     * @default false
      * @type {boolean}
-     * @default false - Defaults to false.
      */
     enableTracing = false;
 
@@ -100,7 +102,7 @@ class EZInstrumentOptions {
     /**
      * Log level (none, info, debug, warn, error, verbose, all).
      * 
-     * @default "error" - Defaults to error logs.
+     * @default "error"
      * @type {("none" | "info" | "debug" | "warn" | "error" | "verbose" | "all")}
      */
     logLevel = "error";
