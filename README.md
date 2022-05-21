@@ -23,7 +23,7 @@ However, by default automatic instrumentation is enabled & supported only for:
 - [@opentelemetry/instrumentation-http](https://github.com/open-telemetry/opentelemetry-js/tree/main/experimental/packages/opentelemetry-instrumentation-http)
 - [@opentelemetry/instrumentation-express](https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/plugins/node/opentelemetry-instrumentation-express)
 
-> _There is currently no way to customize them as well. This library is currently a work-in-progress project. Future versions will allow for greater flexibility in dealing automatic instrumentation libraries._
+> _There is currently no way to customize them as well. This library is currently a work-in-progress project. Future versions will allow for greater flexibility in dealing with automatic instrumentation libraries._
 
 <br/>
 
@@ -57,7 +57,8 @@ Manual instrumentation requires tracing to be initialized via the `EZInstrument`
 
 ```js
 // use globalTracer to create spans manually
-const { EZInstrument, globalTracer: tracer } = require('ez-instrument');
+// use getSpanContext() to nest spans
+const { EZInstrument, globalTracer: tracer, getSpanContext } = require('ez-instrument');
 
 const tracing = new EZInstrument({
     enableTracing: true,
@@ -75,6 +76,17 @@ let span = tracer.startSpan("my span name");    // start span
 // do some work
 
 span.end()                                      // always end spans
+
+
+
+let anotherSpan = tracer.startSpan("another span");
+// spans can be nested by passing context of the parent span to the child
+let childSpan = tracer.startSpan("child span", {}, getSpanContext(anotherSpan));
+
+// do some more work
+
+childSpan.end();
+anotherSpan.end();
 ```
 
 <br/>
@@ -96,12 +108,12 @@ The different input ways are listed above in the order of precedence. For exampl
 
 ### Environment Variables
 
-> _Entries in **bold** are mandatory! Else all are optional._
+> _Entries marked with **`>`** are mandatory! Rest all are optional._
 
 | Name | Acceptable values | Default | Description |
 | --- | --- | --- | --- |
-| **_EZ_ENABLE_TRACING_** | `true`, `false` | `false` | Toggle to enable/disable tracing. |
-| **_EZ_SERVICE_NAME_** | string | `null` | A name for your service. E.g. `Database Writer`, `Session Master` |
+| **_> EZ_ENABLE_TRACING_** | `true`, `false` | `false` | Toggle to enable/disable tracing. |
+| **_> EZ_SERVICE_NAME_** | string | `null` | A name for your service. E.g. `Database Writer`, `Session Master` |
 | EZ_SERVICE_NAMESPACE | string | `null` | A namespace for your service. E.g. `authorization`, `database` |
 | EZ_SERVICE_VERSION | string | `null` | Version of your service. E.g. `1.2.3`, `v3.2.1` |
  EZ_DEPLOYMENT_ENVIRONMENT | string | `null` | Name of environment where your service is deployed in. E.g. `staging`, `production` |
