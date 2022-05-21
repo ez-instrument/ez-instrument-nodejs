@@ -11,8 +11,8 @@ class ConfigFactory {
      getConfigFromEnvironment() {
         const environmentConfig = new EZInstrumentOptions();
         environmentConfig.service.name = process.env.EZ_SERVICE_NAME;
-        environmentConfig.service.name = process.env.EZ_SERVICE_NAMESPACE;
-        environmentConfig.service.name = process.env.EZ_SERVICE_VERSION;
+        environmentConfig.service.namespace = process.env.EZ_SERVICE_NAMESPACE;
+        environmentConfig.service.version = process.env.EZ_SERVICE_VERSION;
 
         environmentConfig.deployment.environment = process.env.EZ_DEPLOYMENT_ENVIRONMENT;
 

@@ -1,21 +1,17 @@
-# ignore these
-temp-notes
-temp-tracing-yaml.yml
-
 # nodejs dependencies directory
 node_modules
-
-# to test out env vars
-.env
 
 # lock file
 package-lock.json
 
-# a testing directory which i use to design the API
-demo
-
 # VS Code config
 .vscode
 
+# to test out env vars
+.env
+
 # my local scripts folder to do CI/CD (might switch to GitHub Actions later)
 scripts
+
+# a testing directory which i use to design various APIs
+demo

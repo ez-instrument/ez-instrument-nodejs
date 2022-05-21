@@ -2,6 +2,9 @@
 
 <br/>
 
+## `0.4.2-beta`
+- Bug fix: all service related environment variables were getting assigned to `service.name` value making `service.namespace` & `service.version` to be blank strings.
+
 ## `0.4.1-beta`
 - Updated README.md with more info on configuration and other stuff.
 - Restructured codebase with a new class: `FinalOptionsBuilder`.
