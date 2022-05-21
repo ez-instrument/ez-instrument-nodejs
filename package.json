@@ -1,6 +1,6 @@
 {
   "name": "ez-instrument",
-  "version": "0.4.1-beta",
+  "version": "0.4.2-beta",
   "description": "Easy OpenTelemetry tracing instrumentation for Node.JS",
   "license": "LGPL-3.0-only",
   "author": {
