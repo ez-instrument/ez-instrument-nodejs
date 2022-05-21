@@ -2,6 +2,10 @@
 
 <br/>
 
+## `0.5.0-beta`
+- Added support for nesting spans via `getSpanContext()` method.
+- Exposed OpenTelemetry's `SpanStatusCode` enum via `EZInstrument`.
+
 ## `0.4.2-beta`
 - Bug fix: all service related environment variables were getting assigned to `service.name` value making `service.namespace` & `service.version` to be blank strings.
 

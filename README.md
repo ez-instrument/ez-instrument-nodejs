@@ -112,8 +112,8 @@ The different input ways are listed above in the order of precedence. For exampl
 
 | Name | Acceptable values | Default | Description |
 | --- | --- | --- | --- |
-| > **_EZ_ENABLE_TRACING_** | `true`, `false` | `false` | Toggle to enable/disable tracing. |
-| > **_EZ_SERVICE_NAME_** | string | `null` | A name for your service. E.g. `Database Writer`, `Session Master` |
+| **_> EZ_ENABLE_TRACING_** | `true`, `false` | `false` | Toggle to enable/disable tracing. |
+| **_> EZ_SERVICE_NAME_** | string | `null` | A name for your service. E.g. `Database Writer`, `Session Master` |
 | EZ_SERVICE_NAMESPACE | string | `null` | A namespace for your service. E.g. `authorization`, `database` |
 | EZ_SERVICE_VERSION | string | `null` | Version of your service. E.g. `1.2.3`, `v3.2.1` |
  EZ_DEPLOYMENT_ENVIRONMENT | string | `null` | Name of environment where your service is deployed in. E.g. `staging`, `production` |
