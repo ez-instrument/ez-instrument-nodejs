@@ -15,7 +15,7 @@ const globalTracer = trace.getTracer();
 function getSpanContext(span) {
     const ctx = trace.setSpan(context.active(), span);
     return ctx;
-};
+}
 
 module.exports = {
     EZInstrument,

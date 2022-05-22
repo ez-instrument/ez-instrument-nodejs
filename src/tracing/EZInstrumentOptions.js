@@ -1,7 +1,7 @@
 /**
- * Configuration model class for EZInstrument.
+ * Configuration model class for {@link EZInstrument}.
  * All input methods such as environment variables, yaml file, constructor, etc. need to return
- * an object of this class to be processed by the FinalOptionsBuilder.
+ * an object of this class which will later be processed by the {@link FinalOptionsBuilder}.
  */
 class EZInstrumentOptions {
     /**
@@ -49,14 +49,14 @@ class EZInstrumentOptions {
     export = {
         /**
          * Export URL where your collector is available.
-         * 
+         *
          * Provide the full URL with protocol, port & endpoints if any.
          * @type {string}
          */
         url: "",
         /**
          * Choose your type of exporter (http, grpc, etc.).
-         * 
+         *
          * Defaults to OpenTelemetry's http exporter.
          * @default "http"
          * @type {("http" | "grpc" | "otel-http" | "otel-grpc")}
@@ -73,25 +73,25 @@ class EZInstrumentOptions {
          */
         batchSpanProcessorConfig: {
             /**
-             * How long the export can run before it is cancelled.
+             * Timeout value in milliseconds for each export. This is the maximum time after which the export is cancelled.
              * @default 30000
              * @type {number}
              */
             exportTimeoutMillis: 30000,
             /**
-             * The maximum batch size of every export. It must be smaller or equal to maxQueueSize.
+             * The maximum batch size in spans of every export. After this, a new batch is created. It must be smaller or equal to maxQueueSize.
              * @default 512
              * @type {number}
              */
             maxExportBatchSize: 512,
             /**
-             * The maximum queue size. After the size is reached spans are dropped.
+             * The maximum queue size in spans beyond which the spans are dropped.
              * @default 2048
              * @type {number}
              */
             maxQueueSize: 2048,
             /**
-             * The delay interval in milliseconds between two consecutive exports.
+             * The delay in milliseconds between two consecutive exports.
              * @default 5000
              * @type {number}
              */
@@ -101,7 +101,7 @@ class EZInstrumentOptions {
 
     /**
      * Log level (none, info, debug, warn, error, verbose, all).
-     * 
+     *
      * @default "error"
      * @type {("none" | "info" | "debug" | "warn" | "error" | "verbose" | "all")}
      */
