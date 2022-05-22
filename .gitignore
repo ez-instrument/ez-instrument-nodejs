@@ -7,6 +7,12 @@ package-lock.json
 # VS Code config
 .vscode
 
+# nyc temp data directory
+.nyc_output
+
+# nyc code coverage result directory
+coverage
+
 # to test out env vars
 .env
 
