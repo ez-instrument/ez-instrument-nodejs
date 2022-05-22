@@ -27,6 +27,12 @@ However, by default automatic instrumentation is enabled & supported only for:
 
 <br/>
 
+## Installation
+
+> _This project has not been published to the npm public registry yet._
+
+<br/>
+
 ## Usage
 
 ### Automatic Instrumentation
@@ -116,7 +122,7 @@ The different input ways are listed above in the order of precedence. For exampl
 | **_> EZ_SERVICE_NAME_** | string | `null` | A name for your service. E.g. `Database Writer`, `Session Master` |
 | EZ_SERVICE_NAMESPACE | string | `null` | A namespace for your service. E.g. `authorization`, `database` |
 | EZ_SERVICE_VERSION | string | `null` | Version of your service. E.g. `1.2.3`, `v3.2.1` |
- EZ_DEPLOYMENT_ENVIRONMENT | string | `null` | Name of environment where your service is deployed in. E.g. `staging`, `production` |
+| EZ_DEPLOYMENT_ENVIRONMENT | string | `null` | Name of environment where your service is deployed in. E.g. `staging`, `production` |
 | EZ_EXPORT_URL | string, full qualified URL | depends on the exporter | The export URL where the collected telemetry will be exported to for processing and/or storage. E.g. `https://my.telemetry-collector.net:4567/v1/traces`|
 | EZ_EXPORTER_TYPE | `http`, `grpc`, `otel-http`, `otel-grpc` | `http` | Type of exporter which will be used to export telemetry. |
 | EZ_ENABLE_CONSOLE_EXPORTER | `true`, `false` | `false` | Toggle to enable/disable the Console Span Exporter which will print out the created spans to stdout. |
@@ -177,11 +183,20 @@ GNU Lesser General Public License version 3 - see [LICENSE](https://github.com/P
 
 <br/>
 
+### v1
+
 - [x] Initial working basic intrumentation.
 - [x] Manual instrumentation support.
-- [ ] Support for opentelemery automatic instrumentation libraries.
 - [x] Environment variable support.
-- [ ] YAML config file support.
-- [ ] CLI to generate a template YAML config file and/or a `.env` file.
-- [ ] Unit tests.
+- [ ] Support for opentelemery automatic instrumentation libraries.
 - [ ] Setup CI/CD for publishing to npm & for running tests when merging to master branch.
+- [ ] Unit tests.
+- [ ] Code coverage of _50+%_.
+
+### v1.x
+
+- [ ] YAML config file support.
+- [ ] `.env` file support.
+- [ ] CLI to generate a template YAML config file and/or a `.env` file.
+- [ ] More unit tests.
+- [ ] Code coverage of _75+%_.

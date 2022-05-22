@@ -9,6 +9,10 @@ class GeneralUtils {
         return (input === "") ? true : false;
     }
 
+    /**
+     * @param {*} input 
+     * @returns {boolean}
+     */
     isNullOrUndefined(input) {
         if(input === null || typeof(input) === 'undefined') {
             return true;

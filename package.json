@@ -1,12 +1,21 @@
 {
   "name": "ez-instrument",
-  "version": "0.5.0-beta",
+  "version": "0.6.9",
   "description": "Easy OpenTelemetry tracing instrumentation for Node.JS",
   "license": "LGPL-3.0-only",
   "author": {
     "name": "Pranshu Mishra",
     "email": "pranshu188@gmail.com"
   },
+  "keywords": [
+    "ez",
+    "ez-instrument",
+    "instrument",
+    "opentelemetry",
+    "tracing",
+    "distributed tracing",
+    "telemetry"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Pro19/ez-instrument-nodejs.git"
@@ -17,13 +26,18 @@
   },
   "main": "./src/index.js",
   "files": [
-    "*"
+    "src/*"
   ],
+  "type": "commonjs",
   "engines": {
     "node": ">=8.0.0"
   },
   "scripts": {
-    "test": "node ./demo/demo.js"
+    "demo": "node ./demo/demo.js",
+    "dependency": "depcheck",
+    "lint": "eslint src/",
+    "test": "mocha --recursive test/",
+    "coverage": "nyc npm test"
   },
   "dependencies": {
     "@opentelemetry/api": "1.1.0",
@@ -38,13 +52,17 @@
     "@opentelemetry/sdk-trace-node": "1.2.0",
     "@opentelemetry/semantic-conventions": "1.2.0"
   },
-  "keywords": [
-    "ez",
-    "ez-instrument",
-    "instrument",
-    "opentelemetry",
-    "tracing",
-    "distributed-tracing",
-    "telemetry"
-  ]
+  "devDependencies": {
+    "chai": "4.3.6",
+    "depcheck": "1.4.3",
+    "eslint": "8.16.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-header": "3.1.1",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-node": "11.1.0",
+    "husky": "8.0.1",
+    "mocha": "10.0.0",
+    "nyc": "15.1.0",
+    "prettier": "2.6.2"
+  }
 }

@@ -70,59 +70,59 @@ class FinalOptionsBuilder {
 
         // make a ServiceOptionsConfigBuilder class for this section
         finalOptions.service.name = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.service.name,
-            environmentOptions.service.name
+            environmentOptions.service.name,
+            constructorOptions.service.name
         ], finalOptions.service.name);
         finalOptions.service.namespace = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.service.namespace,
-            environmentOptions.service.namespace
+            environmentOptions.service.namespace,
+            constructorOptions.service.namespace
         ], finalOptions.service.namespace);
         finalOptions.service.version = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.service.version,
-            environmentOptions.service.version
+            environmentOptions.service.version,
+            constructorOptions.service.version
         ], finalOptions.service.version);
 
         // make a DeploymentOptionsConfigBuilder class for this section
         finalOptions.deployment.environment = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.deployment.environment,
-            environmentOptions.deployment.environment
+            environmentOptions.deployment.environment,
+            constructorOptions.deployment.environment
         ], finalOptions.deployment.environment);
         
         // make a ExportOptionsConfigBuilder class for this section
         // ExportOptionsConfigBuilder will depend on BatchSpanProcessorConfigBuilder class
         finalOptions.export.url = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.export.url,
-            environmentOptions.export.url
+            environmentOptions.export.url,
+            constructorOptions.export.url
         ], finalOptions.export.url);
         finalOptions.export.enableConsoleExporter = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.export.enableConsoleExporter,
-            environmentOptions.export.enableConsoleExporter
+            environmentOptions.export.enableConsoleExporter,
+            constructorOptions.export.enableConsoleExporter
         ], finalOptions.export.enableConsoleExporter);
         finalOptions.export.exporterType = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.export.exporterType,
-            environmentOptions.export.exporterType
+            environmentOptions.export.exporterType,
+            constructorOptions.export.exporterType
         ], finalOptions.export.exporterType);
         finalOptions.export.exporter = this.getExporter(finalOptions.export.exporterType, finalOptions.export.url);
 
         // make a BatchSpanProcessorConfigBuilder class for this section
         finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.export.batchSpanProcessorConfig.exportTimeoutMillis,
-            environmentOptions.export.batchSpanProcessorConfig.exportTimeoutMillis
+            environmentOptions.export.batchSpanProcessorConfig.exportTimeoutMillis,
+            constructorOptions.export.batchSpanProcessorConfig.exportTimeoutMillis
         ], finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis);
 
         finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.export.batchSpanProcessorConfig.maxExportBatchSize,
-            environmentOptions.export.batchSpanProcessorConfig.maxExportBatchSize
+            environmentOptions.export.batchSpanProcessorConfig.maxExportBatchSize,
+            constructorOptions.export.batchSpanProcessorConfig.maxExportBatchSize
         ], finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize);
 
         finalOptions.export.batchSpanProcessorConfig.maxQueueSize = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.export.batchSpanProcessorConfig.maxQueueSize,
-            environmentOptions.export.batchSpanProcessorConfig.maxQueueSize
+            environmentOptions.export.batchSpanProcessorConfig.maxQueueSize,
+            constructorOptions.export.batchSpanProcessorConfig.maxQueueSize
         ],
             finalOptions.export.batchSpanProcessorConfig.maxQueueSize);
         finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis = this._utils.returnNextIfNullOrUndefined([
-            constructorOptions.export.batchSpanProcessorConfig.scheduledDelayMillis,
-            environmentOptions.export.batchSpanProcessorConfig.scheduledDelayMillis
+            environmentOptions.export.batchSpanProcessorConfig.scheduledDelayMillis,
+            constructorOptions.export.batchSpanProcessorConfig.scheduledDelayMillis
         ], finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis);
 
         // FinalOptions verification should either be its own function or class
