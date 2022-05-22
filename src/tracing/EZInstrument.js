@@ -42,7 +42,11 @@ class EZInstrument {
     constructor(options) {
         this.utils = new GeneralUtils();
         
-        this.constructorOptions = options;
+        if(!this.utils.isNullOrUndefined(options)) {
+            this.constructorOptions = options;
+        } else {
+            this.constructorOptions = new EZInstrumentOptions();
+        }
         
         this.log = diag;
         this.log.setLogger(new DiagConsoleLogger(), this.getLogLevel(this.constructorOptions.logLevel));
@@ -90,17 +94,17 @@ class EZInstrument {
     getLogLevel(constructorOption) {
         const logLevel = this.utils.returnNextIfNullOrUndefined([process.env.EZ_LOGLEVEL, constructorOption], "error");
         
-        if(logLevel == "all") {
+        if(logLevel === "all") {
             return DiagLogLevel.ALL;
-        } else if(logLevel == "info") {
+        } else if(logLevel === "info") {
             return DiagLogLevel.INFO;
-        } else if(logLevel == "debug") {
+        } else if(logLevel === "debug") {
             return DiagLogLevel.DEBUG;
-        } else if(logLevel == "warn") {
+        } else if(logLevel === "warn") {
             return DiagLogLevel.WARN;
-        } else if(logLevel == "error") {
+        } else if(logLevel === "error") {
             return DiagLogLevel.ERROR;
-        } else if(logLevel == "none") {
+        } else if(logLevel === "none") {
             return DiagLogLevel.NONE;
         } else {
             this.utils.logAndThrowException(this.log, "ez-instrument: Invalid log level.");
@@ -188,7 +192,7 @@ class EZInstrument {
 
             // graceful shutdown
             ['SIGINT', 'SIGTERM'].forEach(signal => {
-                this.log.debug('ez-instrument: Shutting down gracefully.');
+                this.log.info('ez-instrument: Shutting down gracefully.');
                 process.on(signal, ()=>{
                     unloadInstrumentations();
                     nodeTraceProvider.shutdown()
