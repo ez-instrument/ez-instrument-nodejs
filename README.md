@@ -29,7 +29,9 @@ However, by default automatic instrumentation is enabled & supported only for:
 
 ## Installation
 
-> _This project has not been published to the npm public registry yet._
+```bash
+npm install ez-instrument
+```
 
 <br/>
 
