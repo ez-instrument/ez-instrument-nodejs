@@ -2,6 +2,10 @@
 
 <br/>
 
+## `0.6.10`
+
+- Replaced `console.log` with OpenTelemetry logger.
+
 ## `0.6.9`
 
 - Added first batch of unit tests (using mocha & chai).
