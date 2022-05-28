@@ -72,7 +72,7 @@ class EZInstrument {
                 this.setOpenTelemetryTracing(finalOptions);
             }
         } catch (error) {
-            console.error(error);
+            this.log.error(error);
         }
     }
 
@@ -198,14 +198,14 @@ class EZInstrument {
                     nodeTraceProvider.shutdown()
                     .catch(
                         (error) => {
-                            console.error(error);
+                            this.log.error(error);
                         }
                     );
                 });
             });
 
         } catch (error) {
-            console.error(error);
+            this.log.error(error);
         }
     }
 }
