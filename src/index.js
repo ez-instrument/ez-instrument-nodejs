@@ -1,6 +1,7 @@
 const { EZInstrument } = require('./tracing/EZInstrument');
 const { EZInstrumentOptions } = require('./tracing/EZInstrumentOptions');
 const { trace, context, SpanStatusCode } = require('@opentelemetry/api');
+const { SemanticAttributes } = require('@opentelemetry/semantic-conventions');
 const { Span } = require('@opentelemetry/sdk-trace-base');
 
 /**
@@ -22,5 +23,6 @@ module.exports = {
     EZInstrumentOptions,
     globalTracer,
     getSpanContext,
-    SpanStatusCode
+    SpanStatusCode,
+    SemanticAttributes
 }
