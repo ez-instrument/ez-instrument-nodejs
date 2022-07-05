@@ -2,6 +2,10 @@
 
 <br/>
 
+## `0.7.0`
+
+- Exposed `@opentelemetry/semantic-conventions`'s `SemanticAttributes` object via `ez-instrument`.
+
 ## `0.6.10`
 
 - Replaced `console.log` with OpenTelemetry logger.

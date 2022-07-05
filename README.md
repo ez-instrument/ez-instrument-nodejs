@@ -6,7 +6,7 @@
 
 ## About
 
-EZ-Instrument is a wrapper library for OpenTelemetry. Using this library, you can easily instrument your Node.JS application for traces without worrying about setting up OpenTelemetry tracing yourself.
+EZ-Instrument is a wrapper library for OpenTelemetry. With this library, you can easily instrument your Node.JS application for traces without worrying about setting up OpenTelemetry tracing yourself. Just provide basic info like service name & your application is ready to export traces to your telemetry backend!
 
 EZ-Instrument is a quick and easy way to instrument your application (especially if you are dealing with tons of microservices!).
 
@@ -36,6 +36,33 @@ npm install ez-instrument
 <br/>
 
 ## Usage
+
+Some points to keep in mind:
+- This libary should be the very first thing that is executed by your program.
+- A good practice is to put all `ez-instrument` code in a single file & force it as a requirement for your program (Use the `-r` flag).
+
+Example:
+
+`tracing.js`
+```js
+const { EZInstrument } = require('ez-instrument');
+const tracing = new EZInstrument({
+    enableTracing: true,
+    service: { name: "My Awesome Service" }
+});
+tracing.initTracing();
+```
+`package.json`
+```json
+...
+
+"scripts": {
+    "start": "node -r tracing.js index.js"
+     ...
+}
+
+...
+```
 
 ### Automatic Instrumentation
 
@@ -116,7 +143,7 @@ The different input ways are listed above in the order of precedence. For exampl
 
 ### Environment Variables
 
-> _Entries marked with **`>`** are mandatory! Rest all are optional._
+> _Entries marked with **`>`** are mandatory if not configured via `EZInstrument` class! Rest all are optional._
 
 | Name | Acceptable values | Default | Description |
 | --- | --- | --- | --- |
@@ -139,7 +166,7 @@ The different input ways are listed above in the order of precedence. For exampl
 
 You can either import this class, manipulate its properties & pass it to `EZInstrument`, or initialize it straight in the `EZInstrument` class constructor.
 
-> _If you use tools like VS Code or NVIM (with Coc plugin), intellisense will prove to be very useful._
+> _If you use tools like VS Code or NVIM (with Coc plugin for JS), intellisense will prove to be very useful._
 
 ```js
 const { EZInstrument, EZInstrumentOptions } = require('ez-instrument');
