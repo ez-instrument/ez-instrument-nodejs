@@ -1,5 +1,5 @@
 # ez-instrument-nodejs
-##### _Part of the EZ-Instrument family of libraries._
+##### _OpenTelemetry instrumentation made ez!_
 
 ---
 <br/>
@@ -17,13 +17,27 @@ EZ-Instrument is a quick and easy way to instrument your application (especially
 <br/>
 
 ### Instrumentations
-EZ-Instrument supports both automatic & manual instrumentations.
+EZ-Instrument supports both automatic & manual instrumentations. EZ-Instrument leverages the official OpenTelemetry API for manual & the various official OpenTelemetry automatic instrumentation libraries.
 
-However, by default automatic instrumentation is enabled & supported only for:
-- [@opentelemetry/instrumentation-http](https://github.com/open-telemetry/opentelemetry-js/tree/main/experimental/packages/opentelemetry-instrumentation-http)
-- [@opentelemetry/instrumentation-express](https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/plugins/node/opentelemetry-instrumentation-express)
+Automatic instrumentation is supported for:
+```yaml
+@opentelemetry/instrumentation-dns : 0.29.0
+@opentelemetry/instrumentation-express : 0.30.0
+@opentelemetry/instrumentation-graphql : 0.29.0
+@opentelemetry/instrumentation-grpc : 0.30.0
+@opentelemetry/instrumentation-http : 0.30.0
+@opentelemetry/instrumentation-ioredis : 0.30.0
+@opentelemetry/instrumentation-memcached : 0.29.0
+@opentelemetry/instrumentation-mongodb : 0.31.0
+@opentelemetry/instrumentation-mysql2 : 0.31.0
+@opentelemetry/instrumentation-mysql : 0.30.0
+@opentelemetry/instrumentation-net : 0.29.0
+@opentelemetry/instrumentation-pg : 0.30.0
+@opentelemetry/instrumentation-redis : 0.32.0
+@opentelemetry/instrumentation-redis-4 : 0.31.0
+```
 
-> _There is currently no way to customize them as well. This library is currently a work-in-progress project. Future versions will allow for greater flexibility in dealing with automatic instrumentation libraries._
+> _There is no intellisense support when configuring the individual libraries at the moment. You'll have to refer the official OpenTelemetry documentation to see the various options available for each individual instrumentation library. EZ-Instrument is currently a work-in-progress project. Future versions will have intellisense support._
 
 <br/>
 
@@ -53,7 +67,7 @@ const tracing = new EZInstrument({
 tracing.initTracing();
 ```
 `package.json`
-```json
+```js
 ...
 
 "scripts": {
@@ -77,6 +91,14 @@ const tracing = new EZInstrument({
     enableTracing: true,
     service: {
         name: "My Awesome Service"
+    },
+    autoInstrumentationOptions: {
+        "@opentelemetry/instrumentation-express" : {
+            enabled: false
+        },
+        "@opentelemetry/instrumentation-http" : {
+            enabled: true
+        }
     }
 });
 
@@ -217,7 +239,7 @@ GNU Lesser General Public License version 3 - see [LICENSE](https://github.com/P
 - [x] Initial working basic intrumentation.
 - [x] Manual instrumentation support.
 - [x] Environment variable support.
-- [ ] Support for opentelemery automatic instrumentation libraries.
+- [x] Support for opentelemery automatic instrumentation libraries.
 - [ ] Setup CI/CD for publishing to npm & for running tests when merging to master branch.
 - [ ] Unit tests.
 - [ ] Code coverage of _50+%_.
