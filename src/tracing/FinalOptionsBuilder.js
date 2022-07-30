@@ -125,6 +125,8 @@ class FinalOptionsBuilder {
             constructorOptions.export.batchSpanProcessorConfig.scheduledDelayMillis
         ], finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis);
 
+        finalOptions.autoInstrumentationOptions = constructorOptions.autoInstrumentationOptions;
+
         // FinalOptions verification should either be its own function or class
         (finalOptions.service.name === "") ? 
             this._utils.logAndThrowException(this.log, "ez-instument: Cannot initialize tracing without service name.")

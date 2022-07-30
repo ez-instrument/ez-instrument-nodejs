@@ -130,6 +130,9 @@ class EZInstrument {
         this.log.info(`ez-instrument: batchSpanProcessorConfig.maxExportBatchSize = ${finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize}`);
         this.log.info(`ez-instrument: batchSpanProcessorConfig.maxQueueSize = ${finalOptions.export.batchSpanProcessorConfig.maxQueueSize}`);
         this.log.info(`ez-instrument: batchSpanProcessorConfig.scheduledDelayMillis = ${finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis}`);
+
+        this.log.info(`ez-instrument: automatic instrumentations:`);
+        this.log.info(finalOptions.autoInstrumentationOptions)
     }
 
     /**
@@ -145,8 +148,8 @@ class EZInstrument {
             const { Resource } = require('@opentelemetry/resources');
 
             const { registerInstrumentations } = require('@opentelemetry/instrumentation');
-            const { ExpressInstrumentation } = require('@opentelemetry/instrumentation-express');
-            const { HttpInstrumentation } = require('@opentelemetry/instrumentation-http');
+
+            const { loadAutoInstrumentation } = require('./AutoInstrumentMap')
 
             this.log.info("ez-instrument: Initializing OpenTelemetry tracing.");
 
@@ -179,12 +182,7 @@ class EZInstrument {
             const unloadInstrumentations = registerInstrumentations({
                 tracerProvider: nodeTraceProvider,
                 instrumentations: [
-                    new HttpInstrumentation({               // remove both of these from here
-                        enabled: true
-                    }),
-                    new ExpressInstrumentation({
-                        enabled: true
-                    })
+                    loadAutoInstrumentation(finalOptions.autoInstrumentationOptions)
                 ]
             });
 
@@ -192,15 +190,13 @@ class EZInstrument {
 
             // graceful shutdown
             ['SIGINT', 'SIGTERM'].forEach(signal => {
-                this.log.info('ez-instrument: Shutting down gracefully.');
+                this.log.info(`ez-instrument: ${signal} received. Shutting down gracefully.`);
                 process.on(signal, ()=>{
                     unloadInstrumentations();
                     nodeTraceProvider.shutdown()
-                    .catch(
-                        (error) => {
+                    .catch((error) => {
                             this.log.error(error);
-                        }
-                    );
+                    });
                 });
             });
 

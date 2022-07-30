@@ -1,3 +1,5 @@
+const { otelAutoInstrumentationMap } = require('./AutoInstrumentMap')
+
 /**
  * Configuration model class for {@link EZInstrument}.
  * All input methods such as environment variables, yaml file, constructor, etc. need to return
@@ -106,6 +108,14 @@ class EZInstrumentOptions {
      * @type {("none" | "info" | "debug" | "warn" | "error" | "verbose" | "all")}
      */
     logLevel = "error";
+
+    /**
+     * Configure the various official OpenTelemetry automatic instrumentation libraries.
+     * 
+     * Check out the individual automatic instrumentation library for full documentation.
+     * @type {otelAutoInstrumentationMap}
+     */
+    autoInstrumentationOptions = otelAutoInstrumentationMap;
 }
 
 exports.EZInstrumentOptions = EZInstrumentOptions;
