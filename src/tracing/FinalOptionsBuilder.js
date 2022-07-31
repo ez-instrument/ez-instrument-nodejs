@@ -1,7 +1,7 @@
 const { EZInstrumentOptions } = require('./EZInstrumentOptions');
 const { FinalOptions } = require('./FinalOptions');
 const { GeneralUtils } = require('../utils/GeneralUtils');
-const { DiagAPI } = require('@opentelemetry/api');
+const { diag: logger } = require('@opentelemetry/api');
 
 /**
  * Class to build the final options which will be used to initialize OpenTelemetry tracing.
@@ -9,17 +9,11 @@ const { DiagAPI } = require('@opentelemetry/api');
  */
 class FinalOptionsBuilder {
     /**
-     * @param {DiagAPI} logger
      * @param {EZInstrumentOptions} constructorOptions
      * @param {EZInstrumentOptions} environmentOptions
      */
-    constructor(logger, constructorOptions, environmentOptions) {
+    constructor(constructorOptions, environmentOptions) {
         this._utils = new GeneralUtils();
-        
-        this.log = logger;
-        if(this._utils.isNullOrUndefined(this.log)) {
-            throw "ez-instrument: @opentelemetry/api logger not provided to FinalOptionsBuilder.";
-        }
 
         this._finalOptions = this.buildFinalOptions(constructorOptions, environmentOptions);
     }
@@ -53,7 +47,7 @@ class FinalOptionsBuilder {
             });
             return grpcExporter;
         } else {
-            this.utils.logAndThrowException(this.log, "ez-instrument: Invalid exporter type.");
+            this._utils.logAndThrowException("ez-instrument: Invalid exporter type.");
         }
     }
 
@@ -134,8 +128,8 @@ class FinalOptionsBuilder {
 
         // FinalOptions verification should either be its own function or class
         (finalOptions.service.name === "") ? 
-            this._utils.logAndThrowException(this.log, "ez-instument: Cannot initialize tracing without service name.")
-            : this.log.debug('ez-instrument: Final options verified');
+            this._utils.logAndThrowException("ez-instument: Cannot initialize tracing without service name.")
+            : logger.debug('ez-instrument: Final options verified');
 
         return finalOptions;
     }

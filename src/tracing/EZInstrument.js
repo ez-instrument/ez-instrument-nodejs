@@ -4,7 +4,7 @@ const { GeneralUtils } = require('../utils/GeneralUtils');
 const { ConfigFactory } = require('./ConfigFactory');
 const { FinalOptionsBuilder } = require('./FinalOptionsBuilder');
 
-const { DiagConsoleLogger, diag, DiagLogLevel } = require('@opentelemetry/api');
+const { DiagConsoleLogger, diag: logger, DiagLogLevel } = require('@opentelemetry/api');
 
 /**
  * Instruments your service for tracing.
@@ -48,8 +48,7 @@ class EZInstrument {
             this.constructorOptions = new EZInstrumentOptions();
         }
         
-        this.log = diag;
-        this.log.setLogger(new DiagConsoleLogger(), this.getLogLevel(this.constructorOptions.logLevel));
+        logger.setLogger(new DiagConsoleLogger(), this.getLogLevel(this.constructorOptions.logLevel));
     }
 
     /**
@@ -64,7 +63,7 @@ class EZInstrument {
                 const configFactory = new ConfigFactory();
                 const environmentOptions = configFactory.getConfigFromEnvironment();
                 
-                const builder = new FinalOptionsBuilder(this.log, this.constructorOptions, environmentOptions);
+                const builder = new FinalOptionsBuilder(this.constructorOptions, environmentOptions);
                 const finalOptions = builder.getFinalOptions();
                 
                 this.logFinalOptions(finalOptions);
@@ -72,7 +71,7 @@ class EZInstrument {
                 this.setOpenTelemetryTracing(finalOptions);
             }
         } catch (error) {
-            this.log.error(error);
+            logger.error(error);
         }
     }
 
@@ -109,7 +108,7 @@ class EZInstrument {
         } else if(logLevel === "none") {
             return DiagLogLevel.NONE;
         } else {
-            this.utils.logAndThrowException(this.log, "ez-instrument: Invalid log level.");
+            this.utils.logAndThrowException("ez-instrument: Invalid log level.");
         }
     }
 
@@ -118,25 +117,25 @@ class EZInstrument {
      * @param {FinalOptions} finalOptions 
      */
     logFinalOptions(finalOptions) {
-        this.log.info(`ez-instrument: service.name = ${finalOptions.service.name}`);
-        this.log.info(`ez-instrument: service.namespace = ${finalOptions.service.namespace}`);
-        this.log.info(`ez-instrument: service.version = ${finalOptions.service.version}`);
+        logger.info(`ez-instrument: service.name = ${finalOptions.service.name}`);
+        logger.info(`ez-instrument: service.namespace = ${finalOptions.service.namespace}`);
+        logger.info(`ez-instrument: service.version = ${finalOptions.service.version}`);
 
-        this.log.info(`ez-instrument: deployment.environment = ${finalOptions.deployment.environment}`);
+        logger.info(`ez-instrument: deployment.environment = ${finalOptions.deployment.environment}`);
 
-        this.log.info(`ez-instrument: export.exporterType = ${finalOptions.export.exporterType}`);
-        this.log.info(`ez-instrument: export.url = ${finalOptions.export.url}`);
-        this.log.info(`ez-instrument: export.enableConsoleExporter = ${finalOptions.export.enableConsoleExporter}`);
+        logger.info(`ez-instrument: export.exporterType = ${finalOptions.export.exporterType}`);
+        logger.info(`ez-instrument: export.url = ${finalOptions.export.url}`);
+        logger.info(`ez-instrument: export.enableConsoleExporter = ${finalOptions.export.enableConsoleExporter}`);
 
-        this.log.info(`ez-instrument: batchSpanProcessorConfig.exportTimeoutMillis = ${finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis}`);
-        this.log.info(`ez-instrument: batchSpanProcessorConfig.maxExportBatchSize = ${finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize}`);
-        this.log.info(`ez-instrument: batchSpanProcessorConfig.maxQueueSize = ${finalOptions.export.batchSpanProcessorConfig.maxQueueSize}`);
-        this.log.info(`ez-instrument: batchSpanProcessorConfig.scheduledDelayMillis = ${finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis}`);
+        logger.info(`ez-instrument: batchSpanProcessorConfig.exportTimeoutMillis = ${finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis}`);
+        logger.info(`ez-instrument: batchSpanProcessorConfig.maxExportBatchSize = ${finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize}`);
+        logger.info(`ez-instrument: batchSpanProcessorConfig.maxQueueSize = ${finalOptions.export.batchSpanProcessorConfig.maxQueueSize}`);
+        logger.info(`ez-instrument: batchSpanProcessorConfig.scheduledDelayMillis = ${finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis}`);
 
-        this.log.info(`ez-instrument: captureHostInformation = ${finalOptions.captureHostInformation}`);
+        logger.info(`ez-instrument: captureHostInformation = ${finalOptions.captureHostInformation}`);
 
-        this.log.info(`ez-instrument: automatic instrumentations:`);
-        this.log.info(finalOptions.autoInstrumentationOptions)
+        logger.info(`ez-instrument: automatic instrumentations:`);
+        logger.info(finalOptions.autoInstrumentationOptions)
     }
 
     /**
@@ -156,7 +155,7 @@ class EZInstrument {
             const { loadAutoInstrumentation } = require('./AutoInstrumentMap');
             const { HostResources } = require('./HostResources');
 
-            this.log.info("ez-instrument: Initializing OpenTelemetry tracing.");
+            logger.info("ez-instrument: Initializing OpenTelemetry tracing.");
 
             let serviceResources = new Resource({
                 [SemanticResourceAttributes.SERVICE_NAME]: finalOptions.service.name,
@@ -195,22 +194,22 @@ class EZInstrument {
                 ]
             });
 
-            this.log.info('ez-instrument: Initialized OpenTelemetry tracing.');
+            logger.info('ez-instrument: Initialized OpenTelemetry tracing.');
 
             // graceful shutdown
             ['SIGINT', 'SIGTERM'].forEach(signal => {
-                this.log.info(`ez-instrument: ${signal} received. Shutting down gracefully.`);
+                logger.info(`ez-instrument: ${signal} received. Shutting down gracefully.`);
                 process.on(signal, ()=>{
                     unloadInstrumentations();
                     nodeTraceProvider.shutdown()
                     .catch((error) => {
-                            this.log.error(error);
+                        logger.error(error);
                     });
                 });
             });
 
         } catch (error) {
-            this.log.error(error);
+            logger.error(error);
         }
     }
 }

@@ -1,4 +1,4 @@
-const { diag } = require("@opentelemetry/api");
+const { diag: logger } = require("@opentelemetry/api");
 const { DnsInstrumentation } = require("@opentelemetry/instrumentation-dns");
 const { ExpressInstrumentation } = require("@opentelemetry/instrumentation-express");
 const { GraphQLInstrumentation } = require("@opentelemetry/instrumentation-graphql");
@@ -51,12 +51,12 @@ function loadAutoInstrumentation(input = {}) {
         if (libraryConfig.enabled === true) {
             try {
                 selectedLibraries.push(new currentLibrary(libraryConfig));
-                diag.debug(`ez-instrument: ${library} selected.`);
+                logger.debug(`ez-instrument: ${library} selected.`);
             } catch (error) {
-                diag.error(error);
+                logger.error(error);
             }
         } else {
-            diag.debug(`ez-instrument: ${library} not selected.`);
+            logger.debug(`ez-instrument: ${library} not selected.`);
         }
     }
 

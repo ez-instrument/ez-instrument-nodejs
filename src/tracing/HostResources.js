@@ -1,4 +1,4 @@
-const { diag } = require('@opentelemetry/api');
+const { diag: logger } = require('@opentelemetry/api');
 const { Resource } = require('@opentelemetry/resources');
 const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
 const os = require('node:os');
@@ -11,8 +11,8 @@ class HostResources {
      */
     getContainerSemanticResources() {
         if(fs.existsSync('/.dockerenv')) {
-            diag.debug(`ez-instrument: application is in a docker container.`);
-            diag.debug(`ez-instrument: Semantic resource attributes for containers will be added.`);
+            logger.debug(`ez-instrument: application is in a docker container.`);
+            logger.debug(`ez-instrument: Semantic resource attributes for containers will be added.`);
             
             let containerResources = new Resource({
                 [SemanticResourceAttributes.CONTAINER_RUNTIME]: 'docker',
@@ -71,8 +71,8 @@ class HostResources {
                 hostResources = hostResources.merge(distroResources);
             }
         } else {
-            diag.debug(`ez-instrument: win32 platform detected. ez-instrument cannot determine if application is containerized.`);
-            diag.debug(`ez-instrument: Semantic resource attributes for containers will not be added.`);
+            logger.debug(`ez-instrument: win32 platform detected. ez-instrument cannot determine if application is containerized.`);
+            logger.debug(`ez-instrument: Semantic resource attributes for containers will not be added.`);
         }
 
         return hostResources;
