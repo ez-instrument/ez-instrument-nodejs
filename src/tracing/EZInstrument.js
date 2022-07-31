@@ -96,6 +96,8 @@ class EZInstrument {
         
         if(logLevel === "all") {
             return DiagLogLevel.ALL;
+        } else if(logLevel === "verbose") {
+            return DiagLogLevel.VERBOSE
         } else if(logLevel === "info") {
             return DiagLogLevel.INFO;
         } else if(logLevel === "debug") {
