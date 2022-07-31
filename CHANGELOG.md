@@ -2,6 +2,13 @@
 
 <br/>
 
+## `0.8.2`
+
+- Added basic initial automatic instrumentation libary support.
+- Added support for capturing host, os & container related information to the semantic resource attributes.
+- Bug fix: using the `verbose` log level was throwing exceptions as it was not implemented in code.
+- Improved the way logger is used throughout the library.
+
 ## `0.7.0`
 
 - Exposed `@opentelemetry/semantic-conventions`'s `SemanticAttributes` object via `ez-instrument`.
