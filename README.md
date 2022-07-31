@@ -182,6 +182,7 @@ The different input ways are listed above in the order of precedence. For exampl
 | EZ_MAX_QUEUE_SIZE | number | 2048 | The maximum queue size. After the size is reached spans are dropped. |
 | EZ_SCHEDULED_DELAY_MILLIS | number | 5000 | The delay interval in milliseconds between two consecutive exports. |
 | EZ_LOGLEVEL | `none`, `info`, `debug`, `warn`, `error`, `verbose`, `all` | `error` | Set log level. This option affects the OpenTelemetry log level as well. |
+| EZ_CAPTURE_HOST_INFO | `true`, `false` | `false` | Toggle capturing of host, os & container related information. |
 
 
 ### `EZInstrumentOptions` class
