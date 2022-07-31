@@ -116,6 +116,17 @@ class EZInstrumentOptions {
      * @type {otelAutoInstrumentationMap}
      */
     autoInstrumentationOptions = otelAutoInstrumentationMap;
+
+    /**
+     * Captures host related information like OS name, type, version, etc. & appends it all created spans.
+     * 
+     * If your application is running inside a linux docker container, this option will append container related data as well.
+     * This will not work with windows containers however.
+     * 
+     * @default false
+     * @type {boolean}
+     */
+    captureHostInformation = false;
 }
 
 exports.EZInstrumentOptions = EZInstrumentOptions;

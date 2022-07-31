@@ -127,6 +127,11 @@ class FinalOptionsBuilder {
 
         finalOptions.autoInstrumentationOptions = constructorOptions.autoInstrumentationOptions;
 
+        finalOptions.captureHostInformation = this._utils.returnNextIfNullOrUndefined([
+            environmentOptions.captureHostInformation,
+            constructorOptions.captureHostInformation
+        ], finalOptions.captureHostInformation);
+
         // FinalOptions verification should either be its own function or class
         (finalOptions.service.name === "") ? 
             this._utils.logAndThrowException(this.log, "ez-instument: Cannot initialize tracing without service name.")

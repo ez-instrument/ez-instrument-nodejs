@@ -131,6 +131,8 @@ class EZInstrument {
         this.log.info(`ez-instrument: batchSpanProcessorConfig.maxQueueSize = ${finalOptions.export.batchSpanProcessorConfig.maxQueueSize}`);
         this.log.info(`ez-instrument: batchSpanProcessorConfig.scheduledDelayMillis = ${finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis}`);
 
+        this.log.info(`ez-instrument: captureHostInformation = ${finalOptions.captureHostInformation}`);
+
         this.log.info(`ez-instrument: automatic instrumentations:`);
         this.log.info(finalOptions.autoInstrumentationOptions)
     }
@@ -149,17 +151,22 @@ class EZInstrument {
 
             const { registerInstrumentations } = require('@opentelemetry/instrumentation');
 
-            const { loadAutoInstrumentation } = require('./AutoInstrumentMap')
+            const { loadAutoInstrumentation } = require('./AutoInstrumentMap');
+            const { HostResources } = require('./HostResources');
 
             this.log.info("ez-instrument: Initializing OpenTelemetry tracing.");
 
-            const serviceResources = new Resource({
+            let serviceResources = new Resource({
                 [SemanticResourceAttributes.SERVICE_NAME]: finalOptions.service.name,
                 [SemanticResourceAttributes.SERVICE_NAMESPACE]: finalOptions.service.namespace,
                 [SemanticResourceAttributes.SERVICE_VERSION]: finalOptions.service.version,
 
                 [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: finalOptions.deployment.environment
             });
+
+            if(finalOptions.captureHostInformation === true) {
+                serviceResources = serviceResources.merge(new HostResources().getHostSemanticResources());
+            }
 
             const nodeTraceProvider = new NodeTracerProvider({
                 resource: serviceResources

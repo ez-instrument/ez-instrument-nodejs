@@ -19,10 +19,13 @@ class ConfigFactory {
         environmentConfig.export.url = process.env.EZ_EXPORT_URL;
         environmentConfig.export.exporterType = process.env.EZ_EXPORTER_TYPE;
         environmentConfig.export.enableConsoleExporter = process.env.EZ_ENABLE_CONSOLE_EXPORTER;
+        
         environmentConfig.export.batchSpanProcessorConfig.exportTimeoutMillis = process.env.EZ_EXPORT_TIMEOUT_MILLIS;
         environmentConfig.export.batchSpanProcessorConfig.maxExportBatchSize = process.env.EZ_MAX_EXPORT_BATCH_SIZE;
         environmentConfig.export.batchSpanProcessorConfig.maxQueueSize = process.env.EZ_MAX_QUEUE_SIZE;
         environmentConfig.export.batchSpanProcessorConfig.scheduledDelayMillis = process.env.EZ_SCHEDULED_DELAY_MILLIS;
+
+        environmentConfig.captureHostInformation = process.env.EZ_CAPTURE_HOST_INFO;
 
         return environmentConfig;
     }

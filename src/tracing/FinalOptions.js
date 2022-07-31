@@ -68,6 +68,11 @@ class FinalOptions {
      * @type {otelAutoInstrumentationMap}
      */
     autoInstrumentationOptions = null;
+
+    /**
+     * @type {boolean}
+     */
+    captureHostInformation = false;
 }
 
 exports.FinalOptions = FinalOptions;
