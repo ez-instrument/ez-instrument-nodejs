@@ -1,4 +1,4 @@
-const { DiagAPI } = require('@opentelemetry/api');
+const { diag: logger } = require('@opentelemetry/api');
 
 class GeneralUtils {
     /**
@@ -37,11 +37,9 @@ class GeneralUtils {
     }
 
     /**
-     * 
-     * @param {DiagAPI} logger 
      * @param {string} errorMessage 
      */
-    logAndThrowException(logger, errorMessage) {
+    logAndThrowException(errorMessage) {
         logger.error(errorMessage);
         throw errorMessage;
     }

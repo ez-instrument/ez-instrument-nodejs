@@ -1,4 +1,5 @@
 const { DiagLogLevel } = require('@opentelemetry/api');
+const { otelAutoInstrumentationMap } = require('./AutoInstrumentMap')
 
 class FinalOptions {
 
@@ -62,6 +63,16 @@ class FinalOptions {
      * @type {DiagLogLevel}
      */
     logLevel = DiagLogLevel.ERROR;
+
+    /**
+     * @type {otelAutoInstrumentationMap}
+     */
+    autoInstrumentationOptions = null;
+
+    /**
+     * @type {boolean}
+     */
+    captureHostInformation = false;
 }
 
 exports.FinalOptions = FinalOptions;

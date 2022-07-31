@@ -1,3 +1,5 @@
+const { otelAutoInstrumentationMap } = require('./AutoInstrumentMap')
+
 /**
  * Configuration model class for {@link EZInstrument}.
  * All input methods such as environment variables, yaml file, constructor, etc. need to return
@@ -106,6 +108,25 @@ class EZInstrumentOptions {
      * @type {("none" | "info" | "debug" | "warn" | "error" | "verbose" | "all")}
      */
     logLevel = "error";
+
+    /**
+     * Configure the various official OpenTelemetry automatic instrumentation libraries.
+     * 
+     * Check out the individual automatic instrumentation library for full documentation.
+     * @type {otelAutoInstrumentationMap}
+     */
+    autoInstrumentationOptions = otelAutoInstrumentationMap;
+
+    /**
+     * Captures host related information like OS name, type, version, etc. & appends it all created spans.
+     * 
+     * If your application is running inside a linux docker container, this option will append container related data as well.
+     * This will not work with windows containers however.
+     * 
+     * @default false
+     * @type {boolean}
+     */
+    captureHostInformation = false;
 }
 
 exports.EZInstrumentOptions = EZInstrumentOptions;
