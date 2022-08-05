@@ -11,7 +11,7 @@ class HostResources {
      */
     getContainerSemanticResources() {
         if(fs.existsSync('/.dockerenv')) {
-            logger.debug(`ez-instrument: application is in a docker container.`);
+            logger.debug(`ez-instrument: Application is in a docker container.`);
             logger.debug(`ez-instrument: Semantic resource attributes for containers will be added.`);
             
             let containerResources = new Resource({
