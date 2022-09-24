@@ -14,8 +14,8 @@ class FinalOptionsBuilder {
      */
     constructor(constructorOptions, environmentOptions) {
         this._utils = new GeneralUtils();
-
-        this._finalOptions = this.buildFinalOptions(constructorOptions, environmentOptions);
+        let _constructorOptions = this.verifyOptions(constructorOptions);
+        this._finalOptions = this.buildFinalOptions(_constructorOptions, environmentOptions);
     }
 
     /**
@@ -24,6 +24,34 @@ class FinalOptionsBuilder {
      */
      getFinalOptions() {
         return this._finalOptions;
+    }
+
+    /**
+     * @private
+     * @param {FinalOptions} inputOptions
+     * @returns {FinalOptions}
+     */
+    verifyOptions(inputOptions) {
+        let _finalOptions = new FinalOptions();
+        if(inputOptions) {
+            if(inputOptions.service) {
+                _finalOptions.service = inputOptions.service;
+            }
+            if(inputOptions.deployment) {
+                _finalOptions.deployment = inputOptions.deployment;
+            }
+            if(inputOptions.export) {
+                _finalOptions.export = inputOptions.export;
+                if(inputOptions.export.batchSpanProcessorConfig) {
+                    _finalOptions.export.batchSpanProcessorConfig = inputOptions.export.batchSpanProcessorConfig;
+                }
+            }
+            if(inputOptions.autoInstrumentationOptions) {
+                _finalOptions.autoInstrumentationOptions = inputOptions.autoInstrumentationOptions;
+            }
+        }
+
+        return _finalOptions;
     }
 
     /**
