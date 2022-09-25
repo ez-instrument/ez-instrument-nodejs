@@ -58,7 +58,7 @@ class EZInstrument {
      */
     initTracing() {
         try {
-            // fetch enableTracing flag YAML file as well
+            // TODO: fetch enableTracing flag YAML file as well
             if(this.shouldEnableTracing()) {
                 const configFactory = new ConfigFactory();
                 const environmentOptions = configFactory.getConfigFromEnvironment();
@@ -76,7 +76,7 @@ class EZInstrument {
     }
 
     /**
-     * Will add check for YAML config file later.
+     * TODO: Will add check for YAML config file later.
      * @private
      */
     shouldEnableTracing() {

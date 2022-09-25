@@ -2,9 +2,19 @@
 
 <br/>
 
+## `0.9.0`
+
+- Added unit tests for `ConfigFactory.js` & `AutoInstrumentMap.js`.
+- Bug fix: `EZInstrument` would throw exceptions if some options were not given to the constructor input.
+- Fixed an incorrect log message.
+- Optimized `GeneralUtils`.
+  - Removed `isNullOrUndefinedOrEmpty()`.
+  - Optimized `isNullOrUndefined()`.
+  - Optimized `returnNextIfNullOrUndefined()`.
+
 ## `0.8.2`
 
-- Added basic initial automatic instrumentation libary support.
+- Added basic initial automatic instrumentation library support.
 - Added support for capturing host, os & container related information to the semantic resource attributes.
 - Bug fix: using the `verbose` log level was throwing exceptions as it was not implemented in code.
 - Improved the way logger is used throughout the library.

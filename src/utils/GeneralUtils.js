@@ -5,20 +5,8 @@ class GeneralUtils {
      * @param {*} input 
      * @returns {boolean}
      */
-    isNullOrUndefinedOrEmpty(input) {
-        return (input === "") ? true : false;
-    }
-
-    /**
-     * @param {*} input 
-     * @returns {boolean}
-     */
     isNullOrUndefined(input) {
-        if(input === null || typeof(input) === 'undefined') {
-            return true;
-        } else {
-            return false;
-        }
+        return (input === null || typeof(input) === 'undefined');
     }
 
     /**
@@ -26,14 +14,14 @@ class GeneralUtils {
      * @param {*} defaultValue 
      */
     returnNextIfNullOrUndefined(listOfValues, defaultValue) {
-        let result = defaultValue || null;
-        listOfValues.forEach(element => {
-            if(!this.isNullOrUndefined(element)) {
-                result = element;
-            }
-        });
-
-        return result;
+        let selectedValues = listOfValues
+            .filter((value) => !(typeof(value) === 'undefined'))
+            .filter((value) => !(value === null));
+        if(selectedValues.length === 0) {
+            return defaultValue;
+        } else {
+            return selectedValues[0];
+        }
     }
 
     /**

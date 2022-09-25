@@ -11,7 +11,7 @@ class HostResources {
      */
     getContainerSemanticResources() {
         if(fs.existsSync('/.dockerenv')) {
-            logger.debug(`ez-instrument: application is in a docker container.`);
+            logger.debug(`ez-instrument: Application is in a docker container.`);
             logger.debug(`ez-instrument: Semantic resource attributes for containers will be added.`);
             
             let containerResources = new Resource({
@@ -71,7 +71,7 @@ class HostResources {
                 hostResources = hostResources.merge(distroResources);
             }
         } else {
-            logger.debug(`ez-instrument: win32 platform detected. ez-instrument cannot determine if application is containerized.`);
+            logger.debug(`ez-instrument: Non-linux platform detected. ez-instrument cannot determine if application is containerized.`);
             logger.debug(`ez-instrument: Semantic resource attributes for containers will not be added.`);
         }
 
