@@ -28,11 +28,11 @@ class FinalOptionsBuilder {
 
     /**
      * @private
-     * @param {FinalOptions} inputOptions
-     * @returns {FinalOptions}
+     * @param {EZInstrumentOptions} inputOptions
+     * @returns {EZInstrumentOptions}
      */
     verifyOptions(inputOptions) {
-        let _finalOptions = new FinalOptions();
+        let _finalOptions = new EZInstrumentOptions();
         if(inputOptions) {
             if(inputOptions.service) {
                 _finalOptions.service = inputOptions.service;
