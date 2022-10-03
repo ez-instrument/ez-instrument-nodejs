@@ -57,17 +57,20 @@ class FinalOptionsBuilder {
     /**
      * @private
      * @param {string} exporterType
-     * @param {string|null} exportUrl
+     * @param {string | null} exportUrl
+     * @returns {null | OTLPTraceExporterHttp | OTLPTraceExporterGrpc}
      */
      getExporter(exporterType, exportUrl) {
         exporterType = exporterType.toLowerCase();
-        if(exporterType === 'http' || exporterType === 'otel-http') {
+        if(exporterType === "none") {
+            logger.warn("ez-instrument: No exporter has been selected.");
+            return null;
+        } else if(exporterType === 'http' || exporterType === 'otel-http') {
             const { OTLPTraceExporter: OTLPTraceExporterHttp } = require('@opentelemetry/exporter-trace-otlp-http');
             const httpExporter = new OTLPTraceExporterHttp({
                 url: exportUrl
             });
             return httpExporter;
-
         } else if(exporterType === 'grpc' || exporterType === 'otel-grpc') {
             const { OTLPTraceExporter: OTLPTraceExporterGrpc } = require('@opentelemetry/exporter-trace-otlp-grpc');
             const grpcExporter = new OTLPTraceExporterGrpc({

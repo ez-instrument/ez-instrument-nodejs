@@ -173,12 +173,14 @@ class EZInstrument {
                 resource: serviceResources
             });
 
-            nodeTraceProvider.addSpanProcessor(new BatchSpanProcessor(finalOptions.export.exporter, {
-                exportTimeoutMillis: finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis,
-                maxExportBatchSize: finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize,
-                maxQueueSize: finalOptions.export.batchSpanProcessorConfig.maxQueueSize,
-                scheduledDelayMillis: finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis
-            }));
+            if(finalOptions.export.exporter !== null) {
+                nodeTraceProvider.addSpanProcessor(new BatchSpanProcessor(finalOptions.export.exporter, {
+                    exportTimeoutMillis: finalOptions.export.batchSpanProcessorConfig.exportTimeoutMillis,
+                    maxExportBatchSize: finalOptions.export.batchSpanProcessorConfig.maxExportBatchSize,
+                    maxQueueSize: finalOptions.export.batchSpanProcessorConfig.maxQueueSize,
+                    scheduledDelayMillis: finalOptions.export.batchSpanProcessorConfig.scheduledDelayMillis
+                }));
+            }
 
             if(finalOptions.export.enableConsoleExporter === true) {
                 nodeTraceProvider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
