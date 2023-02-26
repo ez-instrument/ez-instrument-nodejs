@@ -1,4 +1,6 @@
 const { DiagLogLevel } = require('@opentelemetry/api');
+const { OTLPTraceExporter: OTLPTraceExporterGrpc } = require('@opentelemetry/exporter-trace-otlp-grpc');
+const { OTLPTraceExporter: OTLPTraceExporterHttp } = require('@opentelemetry/exporter-trace-otlp-http');
 const { otelAutoInstrumentationMap } = require('./AutoInstrumentMap')
 
 class FinalOptions {
@@ -31,9 +33,12 @@ class FinalOptions {
          */
         url: null,
         /**
-         * @type {string|null}
+         * @type {string}
          */
         exporterType: null,
+        /**
+         * @type {null | OTLPTraceExporterHttp | OTLPTraceExporterGrpc}
+         */
         exporter: null,
         /**
          * @type {boolean}

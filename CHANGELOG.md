@@ -2,6 +2,10 @@
 
 <br/>
 
+## `0.10.1`
+- Added `none` exporter type.
+- Bug fix: Fixed incorrect return type for verifyOptions().
+
 ## `0.9.0`
 
 - Added unit tests for `ConfigFactory.js` & `AutoInstrumentMap.js`.

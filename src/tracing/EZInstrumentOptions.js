@@ -57,13 +57,13 @@ class EZInstrumentOptions {
          */
         url: "",
         /**
-         * Choose your type of exporter (http, grpc, etc.).
+         * Choose your type of exporter (none, http, grpc, etc.).
          *
-         * Defaults to OpenTelemetry's http exporter.
-         * @default "http"
-         * @type {("http" | "grpc" | "otel-http" | "otel-grpc")}
+         * Defaults to no exporter.
+         * @default "none"
+         * @type {("none" | "http" | "grpc" | "otel-http" | "otel-grpc")}
          */
-        exporterType: "http",
+        exporterType: "none",
         /**
          * Enables the ConsoleSpanExporter which prints all spans to the console.
          * @type {boolean}
